@@ -21,7 +21,7 @@ public class BaseController {
     private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
 
     @RequestMapping
-    @BaseResponseBody
+    @ResponseBody
     public Map index() {
         HashMap map = new HashMap();
         map.put("ok", "ok");
