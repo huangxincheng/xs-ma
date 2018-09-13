@@ -21,10 +21,11 @@ public class BaseController {
     private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
 
     @RequestMapping
-    @ResponseBody
+    @BaseResponseBody
     public Map index() {
         HashMap map = new HashMap();
         map.put("ok", "ok");
+        map.put("hehe", "heh");
         return  map;
     }
 
