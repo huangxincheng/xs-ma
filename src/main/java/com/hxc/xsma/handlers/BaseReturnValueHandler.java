@@ -33,7 +33,7 @@ public class BaseReturnValueHandler implements HandlerMethodReturnValueHandler {
     @Override
     public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
         BaseResult baseResult = new BaseResult<>(BaseResult.RESULT_OK_CODE, BaseResult.RESULT_OK_MSG, returnValue);
-        HttpServletResponse response = webRequest.getNativeRequest(HttpServletResponse.class);
+        HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
         response.addHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
         PrintWriter pw = response.getWriter();
         pw.write(new ObjectMapper().writeValueAsString(baseResult));
