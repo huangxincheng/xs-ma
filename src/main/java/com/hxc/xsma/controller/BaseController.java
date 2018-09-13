@@ -1,12 +1,12 @@
 package com.hxc.xsma.controller;
 
+import com.hxc.xsma.annotation.BaseResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,17 +14,18 @@ import java.util.Map;
  * <p>
  * <p>
  **/
-@RestController
+@Controller
 @RequestMapping("/base")
 public class BaseController {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseController.class);
 
     @RequestMapping
-    public String index(@RequestBody Map map) {
-        logger.info("{}", "index");
-        System.out.println("BaseController map = " + map);
-        return "index";
+//    @ResponseBody
+    public @ResponseBody  Map index() {
+        HashMap map = new HashMap();
+        map.put("ok", "ok");
+        return  map;
     }
 
 }

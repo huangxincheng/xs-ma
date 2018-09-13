@@ -16,13 +16,13 @@ import java.io.InputStreamReader;
 public class BaseHandlerHelper {
 
     public static void parsingRequest() throws IOException {
-        HttpServletRequest request = BaseInterceptor.requestLocal.get();
-        String a = request.getParameter("a");
-        System.out.println("BaseHandlerHelper a = " + a);
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
-        String result = IOUtils.toString(reader);
-        System.out.println("BaseHandlerHelper result = " + result);
+//        HttpServletRequest request = BaseInterceptor.requestLocal.get();
+//        String a = request.getParameter("a");
+//        System.out.println("BaseHandlerHelper a = " + a);
+//
+//        BufferedReader reader = new BufferedReader(new InputStreamReader(request.getInputStream()));
+//        String result = IOUtils.toString(reader);
+//        System.out.println("BaseHandlerHelper result = " + result);
     }
 
 }
