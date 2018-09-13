@@ -2,7 +2,7 @@ package com.hxc.xsma.result;
 
 
 
-public class ResultInfo<T> {
+public class BaseResult<T> {
 
     public static final int RESULT_OK_CODE= 0;
 
@@ -14,7 +14,7 @@ public class ResultInfo<T> {
 
     private T data;
 
-    public ResultInfo(int resultCode, String resultMsg, T data) {
+    public BaseResult(int resultCode, String resultMsg, T data) {
         this.resultCode = resultCode;
         this.resultMsg = resultMsg;
         this.data = data;

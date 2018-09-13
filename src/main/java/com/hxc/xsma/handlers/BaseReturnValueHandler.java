@@ -2,11 +2,10 @@ package com.hxc.xsma.handlers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hxc.xsma.annotation.BaseResponseBody;
-import com.hxc.xsma.result.ResultInfo;
+import com.hxc.xsma.result.BaseResult;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
@@ -33,11 +32,11 @@ public class BaseReturnValueHandler implements HandlerMethodReturnValueHandler {
      */
     @Override
     public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
-        ResultInfo resultInfo = new ResultInfo<>(ResultInfo.RESULT_OK_CODE, ResultInfo.RESULT_OK_MSG, returnValue);
+        BaseResult baseResult = new BaseResult<>(BaseResult.RESULT_OK_CODE, BaseResult.RESULT_OK_MSG, returnValue);
         HttpServletResponse response = webRequest.getNativeRequest(HttpServletResponse.class);
         response.addHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
         PrintWriter pw = response.getWriter();
-        pw.write(new ObjectMapper().writeValueAsString(resultInfo));
+        pw.write(new ObjectMapper().writeValueAsString(baseResult));
         pw.flush();
     }
 }
