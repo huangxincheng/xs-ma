@@ -4,17 +4,21 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
-@ToString
+import java.util.Map;
+
+
 public class BaseRequest {
 
     private BasePhead phead;
 
-    @Getter
-    @Setter
-    @ToString
-    static class BasePhead {
+    private Map<String,Object> data;
+
+    private BaseRhead rhead;
+
+    /**
+     * 内部请求信息
+     */
+    public static class BasePhead {
         /**
          * 协议版本
          */
@@ -23,9 +27,39 @@ public class BaseRequest {
          * 客户端版本
          */
         private String cVersion;
+
+        public int getpVersion() {
+            return pVersion;
+        }
+
+        public void setpVersion(int pVersion) {
+            this.pVersion = pVersion;
+        }
+
+        public String getcVersion() {
+            return cVersion;
+        }
+
+        public void setcVersion(String cVersion) {
+            this.cVersion = cVersion;
+        }
+    }
+
+    /**
+     *  通用请求头信息
+     */
+    public static class BaseRhead {
         /**
-         * 请求IP
+         * 请求的Ip
          */
-        private String cIp;
+        private String cip;
+
+        public String getCip() {
+            return cip;
+        }
+
+        public void setCip(String cip) {
+            this.cip = cip;
+        }
     }
 }

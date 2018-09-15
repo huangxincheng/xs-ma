@@ -1,10 +1,18 @@
 package com.hxc.xsma.interceptor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hxc.xsma.annotation.BaseResponseBody;
+import com.hxc.xsma.annotation.BaseRestController;
+import com.hxc.xsma.constant.SystemConstant;
+import com.hxc.xsma.result.BaseRequest;
 import com.hxc.xsma.utils.BaseHandlerHelper;
+import com.hxc.xsma.utils.RequestContent;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -23,7 +31,6 @@ public class BaseInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(BaseInterceptor.class);
 
-    public static ThreadLocal<HttpServletRequest> requestLocal = new ThreadLocal<>();
     /**
      * preHandle方法是进行处理器拦截用的，顾名思义，该方法将在Controller处理之前进行调用，
      * SpringMVC中的Interceptor拦截器是链式的，可以同时存在
@@ -36,14 +43,23 @@ public class BaseInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+//        HandlerMethod handlerMethod = (HandlerMethod) handler;
+//        Annotation[] annotations = handlerMethod.getBeanType().getAnnotations();
+//        for (Annotation annotation : annotations) {
+//            System.out.println(annotation);
+//        }
+        logger.info("--------------------preHandle {}={}", "uri", request.getRequestURI());
         HandlerMethod handlerMethod = (HandlerMethod) handler;
-        Annotation[] annotations = handlerMethod.getBeanType().getAnnotations();
-        for (Annotation annotation : annotations) {
-            System.out.println(annotation);
+        if (handlerMethod.getBeanType().isAnnotationPresent(BaseRestController.class)
+                || handlerMethod.getBeanType().isAnnotationPresent(BaseResponseBody.class)
+                || handlerMethod.hasMethodAnnotation(BaseResponseBody.class)) {
+            String body = IOUtils.toString(request.getInputStream(), SystemConstant.defaultCharacterEncoding);
+            if (StringUtils.isEmpty(body)) {
+                return true;
+            }
+            BaseRequest baseRequest = new ObjectMapper().readValue(body, BaseRequest.class);
+            RequestContent.baseRequestLocal.set(baseRequest);
         }
-        requestLocal.set(request);
-        logger.info("--------------------{}={}", "uri", request.getRequestURI());
-        BaseHandlerHelper.parsingRequest();
         return true;
     }
 
@@ -56,7 +72,7 @@ public class BaseInterceptor implements HandlerInterceptor {
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-
+        logger.info("--------------------postHandle {}={}", "uri", request.getRequestURI());
     }
 
     /**
@@ -65,6 +81,7 @@ public class BaseInterceptor implements HandlerInterceptor {
      */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        requestLocal.remove();
+        logger.info("--------------------afterCompletion {}={}", "uri", request.getRequestURI());
+        RequestContent.baseRequestLocal.remove();
     }
 }
