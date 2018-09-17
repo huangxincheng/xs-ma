@@ -12,12 +12,15 @@ public class BaseResult<T> {
 
     private String resultMsg;
 
+    private Long resultTimeMillis;
+
     private T data;
 
-    public BaseResult(int resultCode, String resultMsg, T data) {
+    public BaseResult(int resultCode, String resultMsg, T data, Long resultTimeMillis) {
         this.resultCode = resultCode;
         this.resultMsg = resultMsg;
         this.data = data;
+        this.resultTimeMillis = resultTimeMillis;
     }
 
     public int getResultCode() {
@@ -42,5 +45,13 @@ public class BaseResult<T> {
 
     public void setData(T data) {
         this.data = data;
+    }
+
+    public Long getResultTimeMillis() {
+        return resultTimeMillis;
+    }
+
+    public void setResultTimeMillis(Long resultTimeMillis) {
+        this.resultTimeMillis = resultTimeMillis;
     }
 }

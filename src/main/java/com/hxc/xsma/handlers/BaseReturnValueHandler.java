@@ -1,8 +1,10 @@
 package com.hxc.xsma.handlers;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hxc.xsma.annotation.BaseResponseBody;
 import com.hxc.xsma.result.BaseResult;
+import com.hxc.xsma.utils.RequestContent;
 import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.http.MediaType;
@@ -33,11 +35,12 @@ public class BaseReturnValueHandler implements HandlerMethodReturnValueHandler {
     @Override
     public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer, NativeWebRequest webRequest) throws Exception {
         mavContainer.setRequestHandled(true);
-        BaseResult baseResult = new BaseResult<>(BaseResult.RESULT_OK_CODE, BaseResult.RESULT_OK_MSG, returnValue);
+        BaseResult baseResult = new BaseResult<>(BaseResult.RESULT_OK_CODE, BaseResult.RESULT_OK_MSG, returnValue,
+                System.currentTimeMillis() - RequestContent.getBaseRequest().getRhead().getRequestTimeMillis());
         HttpServletResponse response = webRequest.getNativeResponse(HttpServletResponse.class);
         response.addHeader("Content-Type", MediaType.APPLICATION_JSON_UTF8_VALUE);
         PrintWriter pw = response.getWriter();
-        pw.write(new ObjectMapper().writeValueAsString(baseResult));
+        pw.write(JSON.toJSONString(baseResult));
         pw.flush();
     }
 }

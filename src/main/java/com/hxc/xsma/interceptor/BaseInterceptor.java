@@ -1,26 +1,22 @@
 package com.hxc.xsma.interceptor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.alibaba.fastjson.JSON;
 import com.hxc.xsma.annotation.BaseResponseBody;
 import com.hxc.xsma.annotation.BaseRestController;
 import com.hxc.xsma.constant.SystemConstant;
 import com.hxc.xsma.result.BaseRequest;
-import com.hxc.xsma.utils.BaseHandlerHelper;
+import com.hxc.xsma.utils.BaseRequestHelper;
 import com.hxc.xsma.utils.RequestContent;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.MethodParameter;
-import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.lang.annotation.Annotation;
 
 /**
  * Author: huangxincheng
@@ -53,11 +49,14 @@ public class BaseInterceptor implements HandlerInterceptor {
         if (handlerMethod.getBeanType().isAnnotationPresent(BaseRestController.class)
                 || handlerMethod.getBeanType().isAnnotationPresent(BaseResponseBody.class)
                 || handlerMethod.hasMethodAnnotation(BaseResponseBody.class)) {
+            Long requestTimeMillis = System.currentTimeMillis();
             String body = IOUtils.toString(request.getInputStream(), SystemConstant.defaultCharacterEncoding);
             if (StringUtils.isEmpty(body)) {
                 return true;
             }
-            BaseRequest baseRequest = new ObjectMapper().readValue(body, BaseRequest.class);
+            BaseRequest baseRequest = JSON.parseObject(body, BaseRequest.class);
+            // 设置客户端信息
+            BaseRequestHelper.seClientInfo(baseRequest, request, requestTimeMillis);
             RequestContent.baseRequestLocal.set(baseRequest);
         }
         return true;

@@ -1,9 +1,5 @@
 package com.hxc.xsma.result;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 import java.util.Map;
 
 
@@ -14,6 +10,30 @@ public class BaseRequest {
     private Map<String,Object> data;
 
     private BaseRhead rhead;
+
+    public BasePhead getPhead() {
+        return phead;
+    }
+
+    public void setPhead(BasePhead phead) {
+        this.phead = phead;
+    }
+
+    public Map<String, Object> getData() {
+        return data;
+    }
+
+    public void setData(Map<String, Object> data) {
+        this.data = data;
+    }
+
+    public BaseRhead getRhead() {
+        return rhead;
+    }
+
+    public void setRhead(BaseRhead rhead) {
+        this.rhead = rhead;
+    }
 
     /**
      * 内部请求信息
@@ -49,17 +69,35 @@ public class BaseRequest {
      *  通用请求头信息
      */
     public static class BaseRhead {
-        /**
-         * 请求的Ip
-         */
-        private String cip;
 
-        public String getCip() {
-            return cip;
+        private String X_RealIp;
+
+        private String X_ForwardedFor;
+
+        private Long requestTimeMillis;
+
+        public String getX_RealIp() {
+            return X_RealIp;
         }
 
-        public void setCip(String cip) {
-            this.cip = cip;
+        public void setX_RealIp(String x_RealIp) {
+            X_RealIp = x_RealIp;
+        }
+
+        public String getX_ForwardedFor() {
+            return X_ForwardedFor;
+        }
+
+        public void setX_ForwardedFor(String x_ForwardedFor) {
+            X_ForwardedFor = x_ForwardedFor;
+        }
+
+        public Long getRequestTimeMillis() {
+            return requestTimeMillis;
+        }
+
+        public void setRequestTimeMillis(Long requestTimeMillis) {
+            this.requestTimeMillis = requestTimeMillis;
         }
     }
 }
