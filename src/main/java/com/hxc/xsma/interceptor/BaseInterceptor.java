@@ -10,6 +10,7 @@ import com.hxc.xsma.utils.RequestContent;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -39,16 +40,13 @@ public class BaseInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-//        HandlerMethod handlerMethod = (HandlerMethod) handler;
-//        Annotation[] annotations = handlerMethod.getBeanType().getAnnotations();
-//        for (Annotation annotation : annotations) {
-//            System.out.println(annotation);
-//        }
         logger.info("--------------------preHandle {}={}", "uri", request.getRequestURI());
         HandlerMethod handlerMethod = (HandlerMethod) handler;
-        if (handlerMethod.getBeanType().isAnnotationPresent(BaseRestController.class)
-                || handlerMethod.getBeanType().isAnnotationPresent(BaseResponseBody.class)
-                || handlerMethod.hasMethodAnnotation(BaseResponseBody.class)) {
+        BaseResponseBody methodAnno = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), BaseResponseBody.class);
+        BaseResponseBody classAnno = AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), BaseResponseBody.class);
+        if (methodAnno == null && classAnno == null) {
+
+        } else {
             Long requestTimeMillis = System.currentTimeMillis();
             String body = IOUtils.toString(request.getInputStream(), SystemConstant.defaultCharacterEncoding);
             if (StringUtils.isEmpty(body)) {
