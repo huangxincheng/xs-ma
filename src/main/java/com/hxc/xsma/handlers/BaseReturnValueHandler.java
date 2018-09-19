@@ -22,6 +22,7 @@ public class BaseReturnValueHandler implements HandlerMethodReturnValueHandler {
 
     /**
      * 类似ResponseBody，仅有添加ResultBeanResponseBody注解的method才会触发
+     * 类似ResponseBody，仅有添加ResultBeanResponseBody注解的method才会触发
      */
     @Override
     public boolean supportsReturnType(MethodParameter returnType) {
